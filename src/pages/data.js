@@ -31,6 +31,9 @@ function Data() {
         startDate={gitData?.created_at}
         company={gitData?.company}
         avatarUrl={gitData?.avatar_url}
+        followers={gitData?.followers}
+        following={gitData?.following}
+        repos={gitData?.public_repos}
       />
       <Chart />
       <Repos />
