@@ -26,8 +26,9 @@ function Login() {
         </h1>
         <input
           name="userid"
-          className="h-16 w-full rounded-md outline-hidden text-center text-3xl font-medium mx-0 my-auto max-w-[500px] p-4 caret-green-400 bg-[#26303c] text-[#F6F8FA]"
+          className="h-16 w-full rounded-md outline-hidden text-center text-3xl mx-0 my-auto max-w-[500px] p-4 caret-green-400 bg-[#26303c] text-[#F6F8FA] font-mono tracking-wide"
           type="text"
+          autoFocus
           onChange={handleChange}
         />
       </form>

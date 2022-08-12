@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import Data from "./components/data";
-import Login from "./components/login";
+import Data from "./pages/data";
+import Login from "./pages/login";
 
 function App() {
   return (
