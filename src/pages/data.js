@@ -4,12 +4,18 @@ import Chart from "./components/chart";
 import Footer from "./components/footer";
 import Info from "./components/info";
 import Repos from "./components/repos";
+import GhPolyglot from "gh-polyglot";
+import { dumpUserData } from "../utils/sampleUserData";
+import { dumpLangData } from "../utils/sampleLangData";
+import { dumpRepoData } from "../utils/sampleRepoData";
 
 function Data() {
   const { id } = useParams();
   const [gitData, setGitData] = useState(null);
+  const [langData, setLangData] = useState(null);
+  const [repoData, setRepoData] = useState(null);
 
-  useEffect(() => {
+  const fetchUserData = () => {
     const abortController = new AbortController();
     fetch(`https://api.github.com/users/${id}`, {
       signal: abortController.signal,
@@ -19,8 +25,35 @@ function Data() {
       })
       .then((jsonResponse) => setGitData(jsonResponse));
     return () => abortController.abort();
-  }, []);
+  };
 
+  const getLangData = () => {
+    const repoLangs = new GhPolyglot(id);
+    repoLangs.userStats((err, stats) => {
+      if (!err) {
+        setLangData(stats);
+      } else console.log(err);
+    });
+  };
+  const fetchRepoData = () => {
+    const abortController = new AbortController();
+    fetch(`https://api.github.com/users/${id}/repos?per_page=50`, {
+      signal: abortController.signal,
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        setRepoData(response);
+      });
+    return () => abortController.abort();
+  };
+  useEffect(() => {
+    setGitData(dumpUserData);
+    setLangData(dumpLangData);
+    setRepoData(dumpRepoData);
+  }, []);
+  // console.log(langData);
   return (
     <div>
       <Info
@@ -35,9 +68,9 @@ function Data() {
         following={gitData?.following}
         repos={gitData?.public_repos}
       />
-      <Chart />
-      <Repos />
-      <Footer />
+      {langData && <Chart langData={langData} />}
+      <Repos repoData={repoData} />
+      {/* <Footer /> */}
     </div>
   );
 }
