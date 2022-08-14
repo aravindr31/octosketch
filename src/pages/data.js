@@ -5,9 +5,6 @@ import Footer from "./components/footer";
 import Info from "./components/info";
 import Repos from "./components/repos";
 import GhPolyglot from "gh-polyglot";
-import { dumpUserData } from "../utils/sampleUserData";
-import { dumpLangData } from "../utils/sampleLangData";
-import { dumpRepoData } from "../utils/sampleRepoData";
 
 function Data() {
   const { id } = useParams();
@@ -49,24 +46,21 @@ function Data() {
       });
     return () => abortController.abort();
   };
-  const staredRepos = () => {
-    if (repoData != null) {
-      // console.log("inside if ");
-      return repoData?.filter((repos) => repos.stargazers_count != 0);
-    } else return null;
-  };
   useEffect(() => {
-    setGitData(dumpUserData);
-    setLangData(dumpLangData);
-    setRepoData(dumpRepoData);
+    fetchUserData();
+    getLangData();
+    fetchRepoData();
   }, []);
   useEffect(() => {
-    // console.log(staredRepos());
-    setStarRepo(staredRepos());
-  }, [repoData != null]);
-  // console.log(starRepo);
+    const staredRepos = () => {
+      if (repoData != null) {
+        return repoData?.filter((repos) => repos.stargazers_count !== 0);
+      } else return null;
+    };
+    setStarRepo(staredRepos);
+  }, [repoData]);
   return (
-    <div>
+    <div className="mb-8">
       <Info
         name={gitData?.name}
         login={gitData?.login}
@@ -82,8 +76,8 @@ function Data() {
       {langData && starRepo && (
         <Chart langData={langData} starRepos={starRepo} />
       )}
-      <Repos />
-      {/* <Footer /> */}
+      {repoData && <Repos repoData={repoData} />}
+      <Footer />
     </div>
   );
 }

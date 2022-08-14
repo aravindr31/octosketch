@@ -42,76 +42,74 @@ function Chart({ langData, starRepos }) {
     let g = parseInt(hex.slice(3, 5), 16);
     let b = parseInt(hex.slice(5, 7), 16);
 
-    return "rgba(" + r + "," + g + "," + b + "," + ".6)";
+    return `rgba(${r},${g},${b},${0.6})`;
   };
-  const reducedBgColor = (bgColor) => {
-    return bgColors.map((bgColor) => colorReducer(bgColor));
+  const reducedBgColor = () => {
+    return bgColors?.map((bgColor) => colorReducer(bgColor));
   };
 
   const getStarRepoLang = () => {
     const fRepos = new Set(starRepos.map((repo) => repo.language));
     const repolabels = Array.from(fRepos.values()).filter((lan) => lan);
     const values = repolabels.map((lang) => {
-      const eachRepo = starRepos.filter((repo) => repo.language == lang);
+      const eachRepo = starRepos.filter((repo) => repo.language === lang);
       const starAccValue = eachRepo.map((r) => r.stargazers_count);
       const accVal = starAccValue.reduce((x, y) => x + y, 0);
       return accVal;
     });
     return [repolabels, values];
   };
-
-  useEffect(() => {
-    const Chart1 = {
+  const chartBuilder = (labels, data, bgColor, bColor, bWidth) => {
+    const Chart = {
       labels: labels,
       datasets: [
         {
-          data: values,
-          backgroundColor: reducedBgColor(bgColors),
-          borderColor: reducedBgColor,
-          borderWidth: 1,
+          data: data,
+          backgroundColor: bgColor,
+          borderColor: bColor,
+          borderWidth: bWidth,
         },
       ],
     };
+    return Chart;
+  };
+  useEffect(() => {
+    const reduceColorSlicer = reducedBgColor(colorPool).slice(
+      0,
+      starRepos?.length
+    );
+    const Chart1 = chartBuilder(
+      labels,
+      values,
+      reducedBgColor,
+      reducedBgColor,
+      1
+    );
+    const Chart2 = chartBuilder(
+      staredRepoNames,
+      staredRepoCount,
+      reduceColorSlicer,
+      reduceColorSlicer,
+      1
+    );
+    const Chart3 = chartBuilder(
+      getStarRepoLang()[0],
+      getStarRepoLang()[1],
+      reduceColorSlicer,
+      reduceColorSlicer,
+      1
+    );
+
     setLangValue(Chart1);
-
-    const Chart2 = {
-      labels: staredRepoNames,
-      datasets: [
-        {
-          data: staredRepoCount,
-          backgroundColor: reducedBgColor(colorPool).slice(
-            0,
-            starRepos?.length
-          ),
-          borderColor: reducedBgColor(colorPool).slice(0, starRepos?.length),
-          borderWidth: 1,
-        },
-      ],
-    };
     setStarValue(Chart2);
-
-    const Chart3 = {
-      labels: getStarRepoLang()[0],
-      datasets: [
-        {
-          data: getStarRepoLang()[1],
-          backgroundColor: reducedBgColor(colorPool).slice(
-            0,
-            starRepos?.length
-          ),
-          borderColor: reducedBgColor(colorPool).slice(0, starRepos?.length),
-          borderWidth: 1,
-        },
-      ],
-    };
     setStarLangValue(Chart3);
   }, []);
   return (
-    <div className="max-w-[1200px] -mt-24 mb-8 grid gap-8 justify-center mx-auto grid-cols-1 justify-items-center md:grid-cols-2 lg:flex">
-      <div className="bg-white max-w-[500px] p-5 rounded-md shadow-xl">
+    <div className="  max-w-[1200px] p-8 -mt-24 mb-8 grid justify-around mx-auto grid-cols-1 justify-items-center md:grid-cols-2 gap-8 lg:flex ">
+      <div className="bg-white max-w-[350px] p-5 rounded-md shadow-xl">
         <div className="flex flex-col py-3">
           <h2 className="text-3xl underline-offset-8 decoration-dashed decoration-neutral-400  decoration-2 underline">
-            Languages
+            Repo Languages
           </h2>
         </div>
         {langValue && (
@@ -138,10 +136,10 @@ function Chart({ langData, starRepos }) {
           />
         )}
       </div>
-      <div className="bg-white max-w-[500px] p-5 rounded-md shadow-xl">
+      <div className="bg-white max-w-[350px] p-5 rounded-md shadow-xl">
         <div className="flex flex-col py-3">
           <h2 className="text-3xl underline-offset-8 decoration-dashed decoration-neutral-400  decoration-2 underline">
-            Most Stared
+            Most Stared Repos
           </h2>
         </div>
         {starValue && (
@@ -160,7 +158,7 @@ function Chart({ langData, starRepos }) {
           />
         )}
       </div>
-      <div className="bg-white max-w-[500px] p-5 rounded-md shadow-xl">
+      <div className="bg-white max-w-[350px] p-5 rounded-md shadow-xl">
         <div className="flex flex-col py-3">
           <h2 className="text-3xl underline-offset-8 decoration-dashed decoration-neutral-400  decoration-2 underline">
             Star Per Language

@@ -46,17 +46,15 @@ function Info({
       <div className="text-gray-50 grid gap-2 grid-cols-3 justify-center mt-[2rem] ">
         <div className="bg-[#334155] flex flex-col sm:px-1 py-2 md:p-4 rounded-md text-center">
           <h1 className="px-4 py-2 text-xl font-semibold">{repos}</h1>
-          <span className="text-sm  md:text-md font-extralight">
-            REPOSITORIES
-          </span>
+          <span className=" text-xs md:text-md font-light">REPOSITORIES</span>
         </div>
         <div className="bg-[#334155] flex flex-col sm:px-1 py-2 md:p-4  rounded-md text-center">
           <h1 className="px-4 py-2 text-xl font-semibold">{followers}</h1>
-          <span className="text-sm md:text-md font-extralight">FOLLOWERS</span>
+          <span className="text-xs md:text-md font-light">FOLLOWERS</span>
         </div>
         <div className="bg-[#334155] flex flex-col sm:px-1 py-2 md:p-4 rounded-md text-center">
           <h1 className="px-4 py-2 text-xl font-semibold">{following}</h1>
-          <span className="text-sm  md:text-md font-extralight">FOLLOWING</span>
+          <span className="text-xs  md:text-md font-light">FOLLOWING</span>
         </div>
       </div>
     </div>
