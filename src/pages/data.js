@@ -14,6 +14,7 @@ function Data() {
   const [gitData, setGitData] = useState(null);
   const [langData, setLangData] = useState(null);
   const [repoData, setRepoData] = useState(null);
+  const [starRepo, setStarRepo] = useState(null);
 
   const fetchUserData = () => {
     const abortController = new AbortController();
@@ -48,12 +49,22 @@ function Data() {
       });
     return () => abortController.abort();
   };
+  const staredRepos = () => {
+    if (repoData != null) {
+      // console.log("inside if ");
+      return repoData?.filter((repos) => repos.stargazers_count != 0);
+    } else return null;
+  };
   useEffect(() => {
     setGitData(dumpUserData);
     setLangData(dumpLangData);
     setRepoData(dumpRepoData);
   }, []);
-  // console.log(langData);
+  useEffect(() => {
+    // console.log(staredRepos());
+    setStarRepo(staredRepos());
+  }, [repoData != null]);
+  // console.log(starRepo);
   return (
     <div>
       <Info
@@ -68,8 +79,10 @@ function Data() {
         following={gitData?.following}
         repos={gitData?.public_repos}
       />
-      {langData && <Chart langData={langData} />}
-      <Repos repoData={repoData} />
+      {langData && starRepo && (
+        <Chart langData={langData} starRepos={starRepo} />
+      )}
+      <Repos />
       {/* <Footer /> */}
     </div>
   );
