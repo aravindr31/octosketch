@@ -37,28 +37,6 @@ function Chart({ langData, starRepos }) {
     Title
   );
 
-  const colorReducer = (hex) => {
-    let r = parseInt(hex.slice(1, 3), 16);
-    let g = parseInt(hex.slice(3, 5), 16);
-    let b = parseInt(hex.slice(5, 7), 16);
-
-    return `rgba(${r},${g},${b},${0.6})`;
-  };
-  const reducedBgColor = () => {
-    return bgColors?.map((bgColor) => colorReducer(bgColor));
-  };
-
-  const getStarRepoLang = () => {
-    const fRepos = new Set(starRepos.map((repo) => repo.language));
-    const repolabels = Array.from(fRepos.values()).filter((lan) => lan);
-    const values = repolabels.map((lang) => {
-      const eachRepo = starRepos.filter((repo) => repo.language === lang);
-      const starAccValue = eachRepo.map((r) => r.stargazers_count);
-      const accVal = starAccValue.reduce((x, y) => x + y, 0);
-      return accVal;
-    });
-    return [repolabels, values];
-  };
   const chartBuilder = (labels, data, bgColor, bColor, bWidth) => {
     const Chart = {
       labels: labels,
@@ -74,10 +52,34 @@ function Chart({ langData, starRepos }) {
     return Chart;
   };
   useEffect(() => {
+    const getStarRepoLang = () => {
+      const fRepos = new Set(starRepos.map((repo) => repo.language));
+      const repolabels = Array.from(fRepos.values()).filter((lan) => lan);
+      const values = repolabels.map((lang) => {
+        const eachRepo = starRepos.filter((repo) => repo.language === lang);
+        const starAccValue = eachRepo.map((r) => r.stargazers_count);
+        const accVal = starAccValue.reduce((x, y) => x + y, 0);
+        return accVal;
+      });
+      return [repolabels, values];
+    };
+
+    const colorReducer = (hex) => {
+      let r = parseInt(hex.slice(1, 3), 16);
+      let g = parseInt(hex.slice(3, 5), 16);
+      let b = parseInt(hex.slice(5, 7), 16);
+
+      return `rgba(${r},${g},${b},${0.6})`;
+    };
+
+    const reducedBgColor = () => {
+      return bgColors?.map((colors) => colorReducer(colors));
+    };
     const reduceColorSlicer = reducedBgColor(colorPool).slice(
       0,
       starRepos?.length
     );
+
     const Chart1 = chartBuilder(
       labels,
       values,
@@ -85,6 +87,7 @@ function Chart({ langData, starRepos }) {
       reducedBgColor,
       1
     );
+
     const Chart2 = chartBuilder(
       staredRepoNames,
       staredRepoCount,
@@ -92,6 +95,7 @@ function Chart({ langData, starRepos }) {
       reduceColorSlicer,
       1
     );
+
     const Chart3 = chartBuilder(
       getStarRepoLang()[0],
       getStarRepoLang()[1],

@@ -8,15 +8,6 @@ const property = [
   { forks: "Fork" },
   { size: "size" },
 ];
-// const property = [
-//   { name: "Wade Cooper" },
-//   { name: "Arlene Mccoy" },
-//   { name: "Devon Webb" },
-//   { name: "Tom Cook" },
-//   { name: "Tanya Fox" },
-//   { name: "Hellen Schmidt" },
-// ];
-
 function Dropdown({ dropdownToRepo }) {
   const [selected, setSelected] = useState(property[0]);
 

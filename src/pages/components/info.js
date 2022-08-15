@@ -1,5 +1,7 @@
 import React from "react";
-
+import { MdDateRange, MdMyLocation } from "react-icons/md";
+import { RiCompassFill } from "react-icons/ri";
+import { HiOfficeBuilding } from "react-icons/hi";
 function Info({
   name,
   location,
@@ -25,22 +27,40 @@ function Info({
       <h3 className="mb-4 text-green-400 text-2xl font-mono ">@{login}</h3>
       <div className=" grid grid-cols-1 place-items-center md:flex flex-row justify-center">
         {location && (
-          <h2 className="mx-3 font-sans text-lg text-green-200">{location}</h2>
+          <>
+            <MdMyLocation className="text-lg text-green-300" />
+            <h2 className="mr-3 ml-2 font-sans sm:text-md lg:text-lg text-green-200">
+              {location}
+            </h2>
+          </>
         )}
         {company && (
-          <h2 className="mx-3 font-sans text-lg text-green-200">{company}</h2>
+          <>
+            <HiOfficeBuilding className="text-lg text-green-300" />
+            <h2 className="mr-3 ml-2 font-sans sm:text-md lg:text-lg text-green-200">
+              {company}
+            </h2>
+          </>
         )}
         {startDate && (
-          <h2 className="mx-3 font-sans text-lg text-green-200">
-            {new Date(startDate).toLocaleDateString("en-us", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </h2>
+          <>
+            <MdDateRange className="text-lg text-green-300" />
+            <h2 className="mr-3 ml-2 font-sans sm:text-md lg:text-lg text-green-200">
+              {new Date(startDate).toLocaleDateString("en-us", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </h2>
+          </>
         )}
         {website && (
-          <h2 className="mx-3 font-sans text-lg text-green-200">{website}</h2>
+          <>
+            <RiCompassFill className="sm:text-sm md:text-lg text-green-300" />
+            <h2 className="sm:text-md lg:text-lg mr-3 ml-2 font-sans  text-green-200">
+              {website}
+            </h2>
+          </>
         )}
       </div>
       <div className="text-gray-50 grid gap-2 grid-cols-3 justify-center mt-[2rem] ">
